@@ -15,8 +15,8 @@ body { font-family: Arial; margin: 10px; transition: background 0.3s, color 0.3s
 }
 .search-section { margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
 .search-label { font-weight: bold; }
-input[type="text"] { padding: 6px; flex: 1 1 150px; min-width: 100px; }
-button { padding: 6px 10px; cursor: pointer; flex: 1 1 auto; min-width: 80px; }
+input[type="text"] { padding: 6px; flex: 1 1 auto; min-width: 100px; max-width: 220px; }
+button { padding: 6px 12px; cursor: pointer; }
 
 #statusContainer { text-align: left; margin-bottom: 8px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
@@ -55,7 +55,7 @@ body.dark-mode {
     background: #1e1e1e;
     color: #ccc;
 }
-body.dark-mode input, body.dark-mode button { background: #333; color: #fff; border: 1px solid #555; }
+body.dark-mode input { background: #333; color: #fff; border: 1px solid #555; }
 body.dark-mode #loadedMsg { color: #00ff00; }
 body.dark-mode #multiTable { border-color: #555; }
 body.dark-mode #multiTable th { background: #555; color: #fff; }
@@ -68,8 +68,9 @@ body.dark-mode #matchStatus { color: #99ff99; }
 @media (max-width: 480px) {
     .container .field { flex-direction: column; }
     .container .label, .container .colon, .container div[id] { margin: 0; }
-    .search-section { flex-direction: column; align-items: stretch; }
-    input[type="text"], button { width: 100%; }
+    .search-section { flex-direction: column; align-items: flex-start; }
+    input[type="text"] { width: 100%; }
+    /* keep buttons normal size, do not stretch */
 }
 </style>
 </head>
@@ -131,7 +132,7 @@ body.dark-mode #matchStatus { color: #99ff99; }
 </div>
 
 <script>
-// Keep your original JS exactly as-is
+// Keep your JS exactly as-is (fetch, search, dark mode)
 const sheetURL = "https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
 let allData = [], typingTimer = null, selectedRow = null;
 const loadedMsg = document.getElementById("loadedMsg");
