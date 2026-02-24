@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -18,102 +17,76 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
     margin-bottom: 20px;
 }
 
-.search-section {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 6px;  /* small spacing */
+/* Search Section */
+.search-section { margin-bottom: 20px; }
+.search-label { 
+    font-weight: bold; 
+    display: block; /* stay above input */
+    margin-bottom: 4px; /* small space above input */
 }
-
-.search-label { font-weight: bold; margin-right: 6px; }
-
-input[type="text"] { 
+.search-input { 
     padding: 6px; 
     width: 220px; 
     max-width: 100%; 
     box-sizing: border-box; 
+    margin-bottom: 6px;
 }
-
+.button-container { margin-top: 4px; }
 button { 
     padding: 6px 12px; 
     cursor: pointer; 
     border: none; 
     border-radius: 4px;
     color: white;
+    margin-right: 5px;
 }
-
-#clearBtn { background-color: #f44336; } /* red */
+#clearBtn { background-color: #f44336; }
 #clearBtn:hover { background-color: #d32f2f; }
-
-#darkModeBtn { background-color: #000; } /* black default */
+#darkModeBtn { background-color: #000; }
 #darkModeBtn:hover { background-color: #333; }
 
+/* Info Grid */
 .container { 
     display: grid; 
-    grid-template-columns: 200px 15px auto; 
+    grid-template-columns: auto auto 1fr; 
     row-gap: 6px; 
     margin-bottom: 25px; 
 }
-
 .label { font-weight: bold; }
-.colon { text-align: left; width: auto; } /* colon 1 space only */
-
+.colon { padding-left: 2px; text-align: left; width: auto; } /* 1 space from label */
 .container div[id] { word-break: break-word; }
 
+/* Status */
 #statusContainer { text-align: left; margin-bottom: 15px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
 #loadedMsg { font-weight: bold; color: green; }
-
 #matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
 
-#multiTableContainer { 
-    display: none; 
-    margin-top: 20px; 
-    overflow-x: auto;
-}
-
-#multiTable { 
-    border-collapse: collapse; 
-    width: 100%; 
-    min-width: 650px;
-    transition: background 0.3s, color 0.3s; 
-}
-
-#multiTable th, #multiTable td { 
-    border: 1px solid #333; 
-    padding: 6px; 
-    text-align: left; 
-    transition: background 0.3s, color 0.3s; 
-}
-
+/* Table */
+#multiTableContainer { display: none; margin-top: 20px; overflow-x: auto; }
+#multiTable { border-collapse: collapse; width: 100%; min-width: 650px; transition: background 0.3s, color 0.3s; }
+#multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; transition: background 0.3s, color 0.3s; }
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
-#sheetName {
-    text-align:left; 
-    font-weight:normal; 
-    margin-bottom:10px; 
-    font-size:13px; 
-    color:#000000;
-}
+#sheetName { font-weight:normal; margin-bottom:10px; font-size:13px; color:#000; }
 
 /* DARK MODE */
 body.dark-mode {
     background: #1e1e1e;
     color: #ccc;
 }
-
 body.dark-mode input { background: #333; color: #fff; border: 1px solid #555; }
 body.dark-mode #clearBtn { background-color: #f44336; color: #fff; }
 body.dark-mode #darkModeBtn { background-color: #ccc; color: #000; }
-
 body.dark-mode #loadedMsg { color: #00ff00; }
 body.dark-mode #multiTable th { background: #555; color: #fff; }
 body.dark-mode #multiTable td { border-color: #666; }
 body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
+
 </style>
 </head>
 <body>
@@ -130,9 +103,11 @@ body.dark-mode #matchStatus { color: #99ff99; }
 
 <div class="search-section">
     <span class="search-label">Search TrackNo :</span>
-    <input type="text" id="searchInput" placeholder="Enter TrackNo" disabled>
-    <button id="clearBtn">Clear</button>
-    <button id="darkModeBtn">Dark Mode</button>
+    <input type="text" id="searchInput" class="search-input" placeholder="Enter TrackNo" disabled>
+    <div class="button-container">
+        <button id="clearBtn">Clear</button>
+        <button id="darkModeBtn">Dark Mode</button>
+    </div>
 </div>
 
 <div class="container">
@@ -182,15 +157,13 @@ const loadedMsg = document.getElementById("loadedMsg");
 const recordCount = document.getElementById("recordCount");
 const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
-const darkModeBtn = document.getElementById("darkModeBtn");
 
-// LOAD DATA
+// Load data
 window.addEventListener("load", async () => {
     try {
         const res = await fetch(sheetURL);
         const data = await res.json();
         if (!data.success || !Array.isArray(data.data)) throw new Error("Invalid server response");
-
         allData = data.data;
         loadedMsg.textContent = "All data loaded. You can now search.";
         recordCount.textContent = allData.length;
@@ -203,12 +176,12 @@ window.addEventListener("load", async () => {
     }
 });
 
-// DARK MODE
-darkModeBtn.addEventListener("click", () => {
+// Dark mode toggle
+document.getElementById("darkModeBtn").addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 });
 
-// LIVE SEARCH
+// Live search
 document.getElementById("searchInput").addEventListener("input", () => {
     clearTimeout(typingTimer);
     const value = document.getElementById("searchInput").value.trim();
@@ -216,10 +189,10 @@ document.getElementById("searchInput").addEventListener("input", () => {
     typingTimer = setTimeout(() => searchLocal(value, true), 2000);
 });
 
-// CLEAR BUTTON
+// Clear button
 document.getElementById("clearBtn").addEventListener("click", clearAll);
 
-// SEARCH LOGIC
+// Search function
 function searchLocal(trackNo, showStatus) {
     const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
 
@@ -237,10 +210,7 @@ function searchLocal(trackNo, showStatus) {
 
     if (matches.length === 1) {
         showDetail(matches[0]);
-        if (showStatus) { 
-            matchStatus.textContent = "VERIFIED DATA"; 
-            matchStatus.style.color = ""; 
-        }
+        if (showStatus) { matchStatus.textContent = "VERIFIED DATA"; matchStatus.style.color = ""; }
         return;
     }
 
@@ -254,28 +224,17 @@ function searchLocal(trackNo, showStatus) {
             "<td>" + (r.LotArea || "") + "</td>" +
             "<td>" + (r.Landclass || "") + "</td>" +
             "<td>" + (r.Barangay || "") + "</td>";
-
         tr.addEventListener("click", function() {
             if (selectedRow) selectedRow.classList.remove("selected");
             tr.classList.add("selected");
             selectedRow = tr;
             showDetail(r);
         });
-
         tbody.appendChild(tr);
-
-        if (index === 0) {
-            tr.classList.add("selected");
-            selectedRow = tr;
-            showDetail(r);
-        }
+        if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
     });
-
     document.getElementById("multiTableContainer").style.display = "block";
-    if (showStatus) { 
-        matchStatus.textContent = "VERIFIED DATA"; 
-        matchStatus.style.color = ""; 
-    }
+    if (showStatus) { matchStatus.textContent = "VERIFIED DATA"; matchStatus.style.color = ""; }
 }
 
 function showDetail(record) {
@@ -286,17 +245,9 @@ function showDetail(record) {
 }
 
 function clearDisplay() { document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); }
-function clearMultiTable() { 
-    document.getElementById("multiTableBody").innerHTML = "";
-    document.getElementById("multiTableContainer").style.display = "none";
-}
-function clearAll() {
-    document.getElementById("searchInput").value = "";
-    clearDisplay();
-    clearMultiTable();
-    selectedRow = null;
-    matchStatus.textContent = "";
-}
+function clearMultiTable() { document.getElementById("multiTableBody").innerHTML = ""; document.getElementById("multiTableContainer").style.display = "none"; }
+function clearAll() { document.getElementById("searchInput").value=""; clearDisplay(); clearMultiTable(); selectedRow=null; matchStatus.textContent=""; }
+
 </script>
 
 </body>
