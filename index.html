@@ -60,9 +60,9 @@ button {
     row-gap: 6px; 
     margin-bottom: 25px; 
 }
-.label { font-weight: bold; }
-.colon { padding-left: 6px; text-align: left; width: auto; } /* extra space for colon */
-.container div[id] { word-break: break-word; font-weight: bold; } /* values bold */
+.label { font-weight: normal; } /* label normal */
+.colon { padding-left: 6px; text-align: left; } /* extra space after colon */
+.container div[id] { font-weight: bold; word-break: break-word; } /* value bold */
 
 /* Status */
 #statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
@@ -192,6 +192,20 @@ document.getElementById("darkModeBtn").addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 });
 
+// Beep function
+function playBeep(type="success") {
+    try {
+        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = window.beepAudioCtx;
+        const oscillator = ctx.createOscillator();
+        oscillator.type = "square";
+        oscillator.frequency.value = type === "success" ? 1000 : 300;
+        oscillator.connect(ctx.destination);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + 0.12);
+    } catch(e) {}
+}
+
 // Live search
 document.getElementById("searchInput").addEventListener("input", () => {
     clearTimeout(typingTimer);
@@ -217,8 +231,10 @@ function searchLocal(trackNo, showStatus) {
         if (showStatus) { 
             matchStatus.textContent = "NO RECORD FOUND"; 
             matchStatus.style.color = "red"; 
-            playBeep("error");
+            playBeep("error"); // beep for no record
         }
+        document.getElementById("searchInput").blur(); // hide keyboard
+        return;
     }
 
     if (matches.length === 1) {
@@ -226,35 +242,45 @@ function searchLocal(trackNo, showStatus) {
         if (showStatus) { 
             matchStatus.textContent = "VERIFIED DATA"; 
             matchStatus.style.color = ""; 
-            playBeep("success");
+            playBeep("success"); // beep for verified
         }
+        document.getElementById("searchInput").blur(); // hide keyboard
+        return;
     }
 
-    if (matches.length > 1) {
-        const tbody = document.getElementById("multiTableBody");
-        matches.forEach((r, index) => {
-            const tr = document.createElement("tr");
-            tr.innerHTML =
-                "<td>" + (r.TrackNo || "") + "</td>" +
-                "<td>" + (r.DateReceipt || "") + "</td>" +
-                "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
-                "<td>" + (r.LotArea || "") + "</td>" +
-                "<td>" + (r.Landclass || "") + "</td>" +
-                "<td>" + (r.Barangay || "") + "</td>";
-            tr.addEventListener("click", function() {
-                if (selectedRow) selectedRow.classList.remove("selected");
-                tr.classList.add("selected");
-                selectedRow = tr;
-                showDetail(r);
-            });
-            tbody.appendChild(tr);
-            if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
+    // Multiple matches
+    const tbody = document.getElementById("multiTableBody");
+    matches.forEach((r, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+            "<td>" + (r.TrackNo || "") + "</td>" +
+            "<td>" + (r.DateReceipt || "") + "</td>" +
+            "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
+            "<td>" + (r.LotArea || "") + "</td>" +
+            "<td>" + (r.Landclass || "") + "</td>" +
+            "<td>" + (r.Barangay || "") + "</td>";
+        tr.addEventListener("click", function() {
+            if (selectedRow) selectedRow.classList.remove("selected");
+            tr.classList.add("selected");
+            selectedRow = tr;
+            showDetail(r);
         });
-        document.getElementById("multiTableContainer").style.display = "block";
+        tbody.appendChild(tr);
+        if (index === 0) { 
+            tr.classList.add("selected"); 
+            selectedRow = tr; 
+            showDetail(r); 
+        }
+    });
+    document.getElementById("multiTableContainer").style.display = "block";
+
+    if (showStatus) { 
+        matchStatus.textContent = "VERIFIED DATA"; 
+        matchStatus.style.color = ""; 
+        playBeep("success"); // beep for first match
     }
 
-    // Auto-hide mobile keyboard after search
-    document.getElementById("searchInput").blur();
+    document.getElementById("searchInput").blur(); // hide keyboard
 }
 
 function showDetail(record) {
@@ -273,19 +299,6 @@ function clearAll() {
     selectedRow=null; 
     matchStatus.textContent=""; 
     matchedCountEl.textContent="0";
-}
-
-function playBeep(type="success") {
-    try {
-        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const ctx = window.beepAudioCtx;
-        const oscillator = ctx.createOscillator();
-        oscillator.type = "square";
-        oscillator.frequency.value = type === "success" ? 1000 : 300; 
-        oscillator.connect(ctx.destination);
-        oscillator.start();
-        oscillator.stop(ctx.currentTime + 0.12);
-    } catch(e) {}
 }
 </script>
 
