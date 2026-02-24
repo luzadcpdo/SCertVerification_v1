@@ -18,72 +18,45 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
 input[type="text"] { padding: 6px; width: 220px; }
 button { padding: 6px 12px; cursor: pointer; }
 button + button { margin-left: 5px; }
+
+/* Container grid for details */
 .container { display: grid; grid-template-columns: 200px 15px auto; row-gap: 6px; margin-bottom: 25px; }
 .label { font-weight: bold; }
 .colon { text-align: center; }
 
+/* Status & record info */
 #statusContainer { text-align: left; margin-bottom: 15px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
 #loadedMsg { font-weight: bold; color: green; }
-
 #matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
+#sheetName { text-align:left; font-weight:normal; margin-bottom:10px; font-size:13px; color:#000000; }
 
+/* Table */
 #multiTableContainer { display: none; margin-top: 20px; overflow-x: auto; }
-#multiTable { border-collapse: collapse; width: 100%; transition: background 0.3s, color 0.3s; }
+#multiTable { border-collapse: collapse; width: 100%; min-width: 600px; transition: background 0.3s, color 0.3s; }
 #multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; transition: background 0.3s, color 0.3s; }
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
-#sheetName {
-    text-align:left; 
-    font-weight:normal; 
-    margin-bottom:10px; 
-    font-size:13px; 
-    color:#000000; /* black default */
-}
-
 /* DARK MODE STYLES */
-body.dark-mode {
-    background: #1e1e1e;
-    color: #ccc;
-}
-body.dark-mode input, body.dark-mode button {
-    background: #333; color: #fff; border: 1px solid #555;
-}
-body.dark-mode #loadedMsg { color: #00ff00; } /* green in dark mode */
+body.dark-mode { background: #1e1e1e; color: #ccc; }
+body.dark-mode input, body.dark-mode button { background: #333; color: #fff; border: 1px solid #555; }
+body.dark-mode #loadedMsg { color: #00ff00; }
 body.dark-mode #multiTable { border-color: #555; }
 body.dark-mode #multiTable th { background: #555; color: #fff; }
 body.dark-mode #multiTable td { border-color: #666; }
 body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
-body.dark-mode #sheetName { color: #fff; } /* keep sheet name visible */
-body.dark-mode #matchStatus { color: #99ff99; } /* VERIFIED DATA light green in dark mode */
+body.dark-mode #sheetName { color: #fff; }
+body.dark-mode #matchStatus { color: #99ff99; }
 
-/* MOBILE RESPONSIVE FIX */
+/* MOBILE: stack label + value to fit screen */
 @media (max-width: 600px) {
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-bottom: 10px;
-    }
-    .container .label,
-    .container .colon,
-    .container div[id] {
-        display: block;
-        margin: 0;
-    }
-    .colon { display: none; } /* hide colon */
+    .container { grid-template-columns: 1fr; } /* full width */
+    .label, .colon, .container div[id] { display: block; margin: 0; }
+    .colon { display: none; }
     .container div[id] { word-break: break-word; }
-    .search-section {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-    input[type="text"] { width: 100%; }
-    button { width: auto; } /* keep original button width */
 }
-#multiTableContainer { overflow-x: auto; } /* table scrollable on mobile */
 </style>
 </head>
 <body>
@@ -126,19 +99,21 @@ body.dark-mode #matchStatus { color: #99ff99; } /* VERIFIED DATA light green in 
 
 <div id="multiTableContainer">
     <h3>Matched Records</h3>
-    <table id="multiTable">
-        <thead>
-            <tr>
-                <th>TrackNo</th>
-                <th>Date Receipt</th>
-                <th>Lot/SurveyNo</th>
-                <th>Lot Area</th>
-                <th>Zone Classification</th>
-                <th>Barangay</th>
-            </tr>
-        </thead>
-        <tbody id="multiTableBody"></tbody>
-    </table>
+    <div style="overflow-x:auto;">
+        <table id="multiTable">
+            <thead>
+                <tr>
+                    <th>TrackNo</th>
+                    <th>Date Receipt</th>
+                    <th>Lot/SurveyNo</th>
+                    <th>Lot Area</th>
+                    <th>Zone Classification</th>
+                    <th>Barangay</th>
+                </tr>
+            </thead>
+            <tbody id="multiTableBody"></tbody>
+        </table>
+    </div>
 </div>
 
 <script>
