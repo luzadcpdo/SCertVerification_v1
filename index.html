@@ -62,7 +62,7 @@ button {
 }
 .label { font-weight: bold; }
 .colon { padding-left: 2px; text-align: left; width: auto; } 
-.container div[id] { word-break: break-word; padding-left: 2px; }
+.container div[id] { word-break: break-word; padding-left: 3px; } /* 3 spaces after colon */
 
 /* Status */
 #statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
@@ -168,7 +168,6 @@ const recordCount = document.getElementById("recordCount");
 const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
 const matchedCountEl = document.getElementById("matchedCount");
-const searchInput = document.getElementById("searchInput");
 
 // Load data
 window.addEventListener("load", async () => {
@@ -180,7 +179,7 @@ window.addEventListener("load", async () => {
         loadedMsg.textContent = "All data loaded. You can now search.";
         recordCount.textContent = allData.length;
         if (data.sheetName) sheetNameEl.textContent = data.sheetName;
-        searchInput.disabled = false;
+        document.getElementById("searchInput").disabled = false;
     } catch(err) {
         console.error(err);
         loadedMsg.textContent = "Failed to load data.";
@@ -194,15 +193,29 @@ document.getElementById("darkModeBtn").addEventListener("click", () => {
 });
 
 // Live search
-searchInput.addEventListener("input", () => {
+document.getElementById("searchInput").addEventListener("input", () => {
     clearTimeout(typingTimer);
-    const value = searchInput.value.trim();
+    const value = document.getElementById("searchInput").value.trim();
     if (!value) { clearAll(); return; }
-    typingTimer = setTimeout(() => searchLocal(value, true), 1000);
+    typingTimer = setTimeout(() => searchLocal(value, true), 2000);
 });
 
 // Clear button
 document.getElementById("clearBtn").addEventListener("click", clearAll);
+
+// Play beep function
+function playBeep(type="success") {
+    try {
+        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = window.beepAudioCtx;
+        const oscillator = ctx.createOscillator();
+        oscillator.type = "square";
+        oscillator.frequency.value = type === "success" ? 1000 : 300;
+        oscillator.connect(ctx.destination);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + 0.12);
+    } catch(e) {}
+}
 
 // Search function
 function searchLocal(trackNo, showStatus) {
@@ -214,14 +227,12 @@ function searchLocal(trackNo, showStatus) {
 
     matchedCountEl.textContent = matches.length;
 
-    // Hide keyboard on mobile
-    searchInput.blur();
-
     if (matches.length === 0) {
         if (showStatus) { 
             matchStatus.textContent = "NO RECORD FOUND"; 
             matchStatus.style.color = "red"; 
             playBeep("error");
+            document.getElementById("searchInput").blur(); // hide keyboard
         }
         return;
     }
@@ -232,6 +243,7 @@ function searchLocal(trackNo, showStatus) {
             matchStatus.textContent = "VERIFIED DATA"; 
             matchStatus.style.color = ""; 
             playBeep("success");
+            document.getElementById("searchInput").blur(); // hide keyboard
         }
         return;
     }
@@ -256,20 +268,25 @@ function searchLocal(trackNo, showStatus) {
         if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
     });
     document.getElementById("multiTableContainer").style.display = "block";
-    if (showStatus) { matchStatus.textContent = "VERIFIED DATA"; matchStatus.style.color = ""; playBeep("success"); }
+    if (showStatus) { 
+        matchStatus.textContent = "VERIFIED DATA"; 
+        matchStatus.style.color = ""; 
+        playBeep("success");
+        document.getElementById("searchInput").blur(); // hide keyboard
+    }
 }
 
 function showDetail(record) {
     for (let key in record) {
         const el = document.getElementById(key);
-        if (el) el.textContent = record[key];
+        if (el) el.textContent = "\u00A0\u00A0\u00A0" + record[key]; // 3 spaces after colon
     }
 }
 
 function clearDisplay() { document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); }
 function clearMultiTable() { document.getElementById("multiTableBody").innerHTML = ""; document.getElementById("multiTableContainer").style.display = "none"; }
 function clearAll() { 
-    searchInput.value = ""; 
+    document.getElementById("searchInput").value=""; 
     clearDisplay(); 
     clearMultiTable(); 
     selectedRow=null; 
@@ -277,19 +294,6 @@ function clearAll() {
     matchedCountEl.textContent="0";
 }
 
-// Beep function
-function playBeep(type="success") {
-    try {
-        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const ctx = window.beepAudioCtx;
-        const oscillator = ctx.createOscillator();
-        oscillator.type = "square";
-        oscillator.frequency.value = type === "success" ? 1000 : 300;
-        oscillator.connect(ctx.destination);
-        oscillator.start();
-        oscillator.stop(ctx.currentTime + 0.12);
-    } catch(e) {}
-}
 </script>
 
 </body>
