@@ -50,7 +50,7 @@ button {
 #darkModeBtn:hover { background-color: #333; }
 
 /* Matched Found */
-#matchedFound { font-weight: bold; margin-bottom: 15px; }
+#matchedFound { margin-bottom: 15px; font-weight: normal; }
 #matchedFound span { font-weight: bold; color: black; }
 
 /* Info Grid */
@@ -65,7 +65,7 @@ button {
 .container div[id] { word-break: break-word; }
 
 /* Status */
-#statusContainer { text-align: left; margin-bottom: 15px; font-size: 13px; }
+#statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
 #loadedMsg { font-weight: bold; color: green; }
@@ -78,7 +78,7 @@ button {
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
-#sheetName { font-weight:normal; margin-bottom:10px; font-size:13px; color:#000; }
+#sheetName { font-weight:normal; margin-bottom:5px; font-size:13px; color:#000; }
 
 /* DARK MODE */
 body.dark-mode {
@@ -107,6 +107,8 @@ body.dark-mode #matchedFound span { color: #ccc; }
     <div id="sheetName">&nbsp;</div>
 </div>
 
+<div id="matchedFound">Matched Found: <span id="matchedCount">0</span></div>
+
 <div id="matchStatus"></div>
 
 <div class="search-section">
@@ -117,8 +119,6 @@ body.dark-mode #matchedFound span { color: #ccc; }
         <button id="darkModeBtn">Dark Mode</button>
     </div>
 </div>
-
-<div id="matchedFound">Matched Found: <span id="matchedCount">0</span></div>
 
 <div class="container">
     <div class="label">TrackNo</div><div class="colon">:</div><div id="TrackNo"></div>
