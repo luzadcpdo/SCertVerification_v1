@@ -4,17 +4,11 @@
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
 
-<!-- ✅ CRITICAL FOR MOBILE -->
+<!-- ✅ ONLY ADDITION (for mobile proper scaling) -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body { 
-    font-family: Arial; 
-    margin: 20px; 
-    transition: background 0.3s, color 0.3s; 
-}
-
-/* HEADER */
+body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s; }
 .header {
     font-size: 24px;
     font-weight: bold;
@@ -23,108 +17,81 @@ body {
     border-bottom: 2px solid #333;
     margin-bottom: 20px;
 }
+.search-section { margin-bottom: 20px; }
+.search-label { font-weight: bold; margin-right: 8px; }
+input[type="text"] { padding: 6px; width: 220px; max-width: 100%; box-sizing: border-box; }
+button { padding: 6px 12px; cursor: pointer; }
+button + button { margin-left: 5px; }
 
-/* SEARCH */
-.search-section { 
-    margin-bottom: 20px; 
-}
-
-.search-label { 
-    font-weight: bold; 
-    margin-right: 8px; 
-}
-
-input[type="text"] { 
-    padding: 6px; 
-    width: 220px; 
-    max-width: 100%;
-    box-sizing: border-box;
-}
-
-button { 
-    padding: 6px 12px; 
-    cursor: pointer; 
-    max-width: 100%;
-}
-
-button + button { 
-    margin-left: 5px; 
-}
-
-/* DETAILS GRID (UNCHANGED STRUCTURE) */
 .container { 
     display: grid; 
     grid-template-columns: 200px 15px auto; 
     row-gap: 6px; 
     margin-bottom: 25px; 
 }
-
 .label { font-weight: bold; }
 .colon { text-align: center; }
 
 .container div[id] {
-    word-break: break-word; /* prevents overflow */
+    word-break: break-word;
 }
 
-/* STATUS */
 #statusContainer { text-align: left; margin-bottom: 15px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
 #loadedMsg { font-weight: bold; color: green; }
-#matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
-#sheetName { text-align:left; font-weight:normal; margin-bottom:10px; font-size:13px; color:#000000; }
 
-/* TABLE */
+#matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
+
 #multiTableContainer { 
     display: none; 
     margin-top: 20px; 
-    overflow-x: auto; /* allow horizontal scroll */
+    overflow-x: auto; /* allow slide left/right */
 }
 
 #multiTable { 
     border-collapse: collapse; 
     width: 100%; 
-    min-width: 600px; /* keep scroll behavior */
+    min-width: 650px; /* keeps horizontal scroll on small screen */
+    transition: background 0.3s, color 0.3s; 
 }
 
-#multiTable th, #multiTable td { 
+#multiTable th, 
+#multiTable td { 
     border: 1px solid #333; 
     padding: 6px; 
     text-align: left; 
+    transition: background 0.3s, color 0.3s; 
 }
 
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
+#sheetName {
+    text-align:left; 
+    font-weight:normal; 
+    margin-bottom:10px; 
+    font-size:13px; 
+    color:#000000;
+}
+
 /* DARK MODE */
-body.dark-mode { background: #1e1e1e; color: #ccc; }
-body.dark-mode input, body.dark-mode button { background: #333; color: #fff; border: 1px solid #555; }
+body.dark-mode {
+    background: #1e1e1e;
+    color: #ccc;
+}
+body.dark-mode input, 
+body.dark-mode button {
+    background: #333; 
+    color: #fff; 
+    border: 1px solid #555;
+}
 body.dark-mode #loadedMsg { color: #00ff00; }
 body.dark-mode #multiTable th { background: #555; color: #fff; }
 body.dark-mode #multiTable td { border-color: #666; }
 body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
-
-/* MOBILE SAFE ADJUSTMENTS (NO LAYOUT CHANGE) */
-@media (max-width: 600px) {
-
-    body { margin: 10px; }
-
-    input[type="text"] {
-        width: 100%;
-    }
-
-    button {
-        width: 100%;
-        margin-top: 5px;
-    }
-
-    .container {
-        grid-template-columns: 140px 10px auto;
-    }
-
-}
 </style>
 </head>
 <body>
@@ -167,25 +134,144 @@ body.dark-mode #matchStatus { color: #99ff99; }
 
 <div id="multiTableContainer">
     <h3>Matched Records</h3>
-    <div style="overflow-x:auto;">
-        <table id="multiTable">
-            <thead>
-                <tr>
-                    <th>TrackNo</th>
-                    <th>Date Receipt</th>
-                    <th>Lot/SurveyNo</th>
-                    <th>Lot Area</th>
-                    <th>Zone Classification</th>
-                    <th>Barangay</th>
-                </tr>
-            </thead>
-            <tbody id="multiTableBody"></tbody>
-        </table>
-    </div>
+    <table id="multiTable">
+        <thead>
+            <tr>
+                <th>TrackNo</th>
+                <th>Date Receipt</th>
+                <th>Lot/SurveyNo</th>
+                <th>Lot Area</th>
+                <th>Zone Classification</th>
+                <th>Barangay</th>
+            </tr>
+        </thead>
+        <tbody id="multiTableBody"></tbody>
+    </table>
 </div>
 
 <script>
-/* YOUR ORIGINAL JS GOES HERE UNCHANGED */
+const sheetURL = "https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
+
+let allData = [];
+let typingTimer = null;
+let selectedRow = null;
+
+const loadedMsg = document.getElementById("loadedMsg");
+const recordCount = document.getElementById("recordCount");
+const sheetNameEl = document.getElementById("sheetName");
+const matchStatus = document.getElementById("matchStatus");
+const darkModeBtn = document.getElementById("darkModeBtn");
+
+window.addEventListener("load", async () => {
+    try {
+        const res = await fetch(sheetURL);
+        const data = await res.json();
+        if (!data.success || !Array.isArray(data.data)) throw new Error("Invalid server response");
+
+        allData = data.data;
+        loadedMsg.textContent = "All data loaded. You can now search.";
+        recordCount.textContent = allData.length;
+        if (data.sheetName) sheetNameEl.textContent = data.sheetName;
+        document.getElementById("searchInput").disabled = false;
+    } catch(err) {
+        console.error(err);
+        loadedMsg.textContent = "Failed to load data.";
+        loadedMsg.style.color = "red";
+    }
+});
+
+darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+});
+
+document.getElementById("searchInput").addEventListener("input", () => {
+    clearTimeout(typingTimer);
+    const value = document.getElementById("searchInput").value.trim();
+    if (!value) { clearAll(); return; }
+    typingTimer = setTimeout(() => searchLocal(value, true), 2000);
+});
+
+document.getElementById("clearBtn").addEventListener("click", clearAll);
+
+function searchLocal(trackNo, showStatus) {
+    const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
+
+    clearDisplay();
+    clearMultiTable();
+    selectedRow = null;
+
+    if (matches.length === 0) {
+        if (showStatus) { 
+            matchStatus.textContent = "NO RECORD FOUND"; 
+            matchStatus.style.color = "red"; 
+        }
+        return;
+    }
+
+    if (matches.length === 1) {
+        showDetail(matches[0]);
+        if (showStatus) { 
+            matchStatus.textContent = "VERIFIED DATA"; 
+            matchStatus.style.color = ""; 
+        }
+        return;
+    }
+
+    const tbody = document.getElementById("multiTableBody");
+    matches.forEach((r, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML =
+            "<td>" + (r.TrackNo || "") + "</td>" +
+            "<td>" + (r.DateReceipt || "") + "</td>" +
+            "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
+            "<td>" + (r.LotArea || "") + "</td>" +
+            "<td>" + (r.Landclass || "") + "</td>" +
+            "<td>" + (r.Barangay || "") + "</td>";
+
+        tr.addEventListener("click", function() {
+            if (selectedRow) selectedRow.classList.remove("selected");
+            tr.classList.add("selected");
+            selectedRow = tr;
+            showDetail(r);
+        });
+
+        tbody.appendChild(tr);
+
+        if (index === 0) {
+            tr.classList.add("selected");
+            selectedRow = tr;
+            showDetail(r);
+        }
+    });
+
+    document.getElementById("multiTableContainer").style.display = "block";
+    if (showStatus) { 
+        matchStatus.textContent = "VERIFIED DATA"; 
+        matchStatus.style.color = ""; 
+    }
+}
+
+function showDetail(record) {
+    for (let key in record) {
+        const el = document.getElementById(key);
+        if (el) el.textContent = record[key];
+    }
+}
+
+function clearDisplay() { 
+    document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); 
+}
+function clearMultiTable() {
+    document.getElementById("multiTableBody").innerHTML = "";
+    document.getElementById("multiTableContainer").style.display = "none";
+}
+function clearAll() {
+    document.getElementById("searchInput").value = "";
+    clearDisplay();
+    clearMultiTable();
+    selectedRow = null;
+    matchStatus.textContent = "";
+}
 </script>
 
 </body>
