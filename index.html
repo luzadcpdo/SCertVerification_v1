@@ -19,7 +19,7 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
 }
 
 /* Search Section */
-.search-section { margin-bottom: 20px; }
+.search-section { margin-bottom: 10px; }
 .search-label { 
     font-weight: bold; 
     display: block; 
@@ -28,10 +28,10 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
 .search-container { display: flex; align-items: center; flex-wrap: wrap; }
 .search-input { 
     padding: 6px; 
-    width: 180px;       /* width of search box */
+    width: 180px;       
     max-width: 100%;    
     box-sizing: border-box; 
-    margin-right: 6px;  /* space between search box and buttons */
+    margin-right: 6px;  
 }
 
 /* Buttons */
@@ -42,12 +42,16 @@ button {
     border-radius: 4px;
     color: white;
     margin-right: 5px;
-    margin-top: 0; /* align with search box */
+    margin-top: 0; 
 }
 #clearBtn { background-color: #f44336; }
 #clearBtn:hover { background-color: #d32f2f; }
 #darkModeBtn { background-color: #000; }
 #darkModeBtn:hover { background-color: #333; }
+
+/* Matched Found */
+#matchedFound { font-weight: bold; margin-bottom: 15px; }
+#matchedFound span { font-weight: bold; color: black; }
 
 /* Info Grid */
 .container { 
@@ -57,7 +61,7 @@ button {
     margin-bottom: 25px; 
 }
 .label { font-weight: bold; }
-.colon { padding-left: 2px; text-align: left; width: auto; } /* 1 space from label */
+.colon { padding-left: 2px; text-align: left; width: auto; } 
 .container div[id] { word-break: break-word; }
 
 /* Status */
@@ -65,7 +69,7 @@ button {
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
 #loadedMsg { font-weight: bold; color: green; }
-#matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
+#matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: green; }
 
 /* Table */
 #multiTableContainer { display: none; margin-top: 20px; overflow-x: auto; }
@@ -90,6 +94,7 @@ body.dark-mode #multiTable td { border-color: #666; }
 body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
+body.dark-mode #matchedFound span { color: #ccc; }
 </style>
 </head>
 <body>
@@ -112,6 +117,8 @@ body.dark-mode #matchStatus { color: #99ff99; }
         <button id="darkModeBtn">Dark Mode</button>
     </div>
 </div>
+
+<div id="matchedFound">Matched Found: <span id="matchedCount">0</span></div>
 
 <div class="container">
     <div class="label">TrackNo</div><div class="colon">:</div><div id="TrackNo"></div>
@@ -160,6 +167,7 @@ const loadedMsg = document.getElementById("loadedMsg");
 const recordCount = document.getElementById("recordCount");
 const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
+const matchedCountEl = document.getElementById("matchedCount");
 
 // Load data
 window.addEventListener("load", async () => {
@@ -202,6 +210,8 @@ function searchLocal(trackNo, showStatus) {
     clearDisplay();
     clearMultiTable();
     selectedRow = null;
+
+    matchedCountEl.textContent = matches.length; // update matched count
 
     if (matches.length === 0) {
         if (showStatus) { 
@@ -249,10 +259,15 @@ function showDetail(record) {
 
 function clearDisplay() { document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); }
 function clearMultiTable() { document.getElementById("multiTableBody").innerHTML = ""; document.getElementById("multiTableContainer").style.display = "none"; }
-function clearAll() { document.getElementById("searchInput").value=""; clearDisplay(); clearMultiTable(); selectedRow=null; matchStatus.textContent=""; }
-
+function clearAll() { 
+    document.getElementById("searchInput").value=""; 
+    clearDisplay(); 
+    clearMultiTable(); 
+    selectedRow=null; 
+    matchStatus.textContent=""; 
+    matchedCountEl.textContent="0";
+}
 </script>
 
 </body>
 </html>
-
