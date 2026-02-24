@@ -50,12 +50,45 @@ body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff;
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
 
-/* MOBILE: stack label + value to fit screen */
+/* MOBILE: details + buttons fit screen */
 @media (max-width: 600px) {
-    .container { grid-template-columns: 1fr; } /* full width */
-    .label, .colon, .container div[id] { display: block; margin: 0; }
+    /* Search section */
+    .search-section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* space between input and buttons */
+    }
+    .search-section input[type="text"],
+    .search-section button {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 10px; /* bigger tap area for mobile */
+        font-size: 16px;
+    }
+
+    /* Details container */
+    .container {
+        grid-template-columns: 1fr; /* stack all items */
+        row-gap: 10px; 
+        padding: 0 10px; /* small padding on sides */
+    }
+
+    .label {
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
     .colon { display: none; }
-    .container div[id] { word-break: break-word; }
+    .container div[id] {
+        word-break: break-word;
+        padding-left: 4px; /* slight indent for values */
+    }
+
+    /* Smaller font for details on mobile */
+    .container .label,
+    .container div[id] {
+        font-size: 14px;
+    }
 }
 </style>
 </head>
