@@ -25,13 +25,13 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
     display: block; 
     margin-bottom: 4px; 
 }
-.search-container { display: block; text-align: left; }
+.search-container { display: flex; align-items: center; flex-wrap: wrap; }
 .search-input { 
     padding: 6px; 
-    width: 180px;       /* reduced width to align with buttons */
+    width: 180px;       /* width of search box */
     max-width: 100%;    
     box-sizing: border-box; 
-    margin-bottom: 6px; 
+    margin-right: 6px;  /* space between search box and buttons */
 }
 
 /* Buttons */
@@ -42,6 +42,7 @@ button {
     border-radius: 4px;
     color: white;
     margin-right: 5px;
+    margin-top: 0; /* align with search box */
 }
 #clearBtn { background-color: #f44336; }
 #clearBtn:hover { background-color: #d32f2f; }
@@ -107,7 +108,6 @@ body.dark-mode #matchStatus { color: #99ff99; }
     <span class="search-label">Search TrackNo :</span>
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Enter TrackNo" disabled>
-        <br>
         <button id="clearBtn">Clear</button>
         <button id="darkModeBtn">Dark Mode</button>
     </div>
