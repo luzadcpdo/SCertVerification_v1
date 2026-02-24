@@ -21,13 +21,12 @@ body {
     margin-bottom: 15px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 5px;
+    align-items: center;
 }
 .search-label { font-weight: bold; }
 input[type="text"] { padding: 6px; flex: 1; min-width: 100px; max-width: 200px; }
 button { padding: 6px 12px; cursor: pointer; }
-button + button { margin-left: 5px; }
 
 #statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
 #recordCount { color: blue; font-weight: bold; }
@@ -35,22 +34,28 @@ button + button { margin-left: 5px; }
 #matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: green; }
 #sheetName { font-size: 13px; color: #000; margin-bottom: 10px; }
 
+/* DETAILS: Label : Data format */
 .container {
-    display: grid;
-    grid-template-columns: auto; /* full width for each row */
-    row-gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 .container .row {
     display: flex;
     flex-wrap: wrap;
 }
-.container .label { font-weight: bold; flex: 1 1 40%; min-width: 100px; }
-.container .value { flex: 2 1 60%; min-width: 100px; word-wrap: break-word; }
+.container .label {
+    font-weight: bold;
+    flex: 0 0 auto; /* auto width for label */
+    margin-right: 5px;
+}
+.container .colon { flex: 0 0 auto; margin-right: 5px; }
+.container .value { flex: 1 1 auto; word-wrap: break-word; }
 
 /* Table */
 #multiTableContainer { display: none; margin-top: 10px; overflow-x: auto; }
-#multiTable { border-collapse: collapse; width: 100%; min-width: 600px; transition: background 0.3s, color 0.3s; }
-#multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; transition: background 0.3s, color 0.3s; }
+#multiTable { border-collapse: collapse; width: 100%; min-width: 600px; }
+#multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; }
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
@@ -65,10 +70,10 @@ body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff;
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
 
-/* MOBILE: make labels above values for very small screens */
+/* Small screens: wrap label and colon if necessary */
 @media (max-width: 480px) {
-    .container .row { flex-direction: column; }
-    .container .label, .container .value { flex: 1 1 100%; min-width: auto; }
+    .container .row { flex-wrap: wrap; }
+    .container .label, .container .colon, .container .value { flex: 1 1 100%; margin-bottom: 2px; }
 }
 </style>
 </head>
@@ -92,22 +97,22 @@ body.dark-mode #matchStatus { color: #99ff99; }
 </div>
 
 <div class="container" id="detailsContainer">
-    <div class="row"><div class="label">TrackNo</div><div class="value" id="TrackNo"></div></div>
-    <div class="row"><div class="label">Date Receipt</div><div class="value" id="DateReceipt"></div></div>
-    <div class="row"><div class="label">Lot/SurveyNo</div><div class="value" id="Lot/SurveyNo"></div></div>
-    <div class="row"><div class="label">Lot Area</div><div class="value" id="LotArea"></div></div>
-    <div class="row"><div class="label">Zone Classification</div><div class="value" id="Landclass"></div></div>
-    <div class="row"><div class="label">Barangay</div><div class="value" id="Barangay"></div></div>
-    <div class="row"><div class="label">Subdivided Area</div><div class="value" id="SubdividedArea"></div></div>
-    <div class="row"><div class="label">Date Approved DENRLMB</div><div class="value" id="DateApprovedDENRLMB"></div></div>
-    <div class="row"><div class="label">RoadWidth</div><div class="value" id="RoadWidth"></div></div>
-    <div class="row"><div class="label">Applicant Name</div><div class="value" id="ApplicantName"></div></div>
-    <div class="row"><div class="label">Lot Owner</div><div class="value" id="LotOwner"></div></div>
-    <div class="row"><div class="label">Legal Basis</div><div class="value" id="legalbasis_f"></div></div>
-    <div class="row"><div class="label">OR No</div><div class="value" id="ORNo"></div></div>
-    <div class="row"><div class="label">Amount Paid</div><div class="value" id="AmountPaid"></div></div>
-    <div class="row"><div class="label">Date Released</div><div class="value" id="DateSignedHead"></div></div>
-    <div class="row"><div class="label">Remarks</div><div class="value" id="Remarks"></div></div>
+    <div class="row"><div class="label">TrackNo</div><div class="colon">:</div><div class="value" id="TrackNo"></div></div>
+    <div class="row"><div class="label">Date Receipt</div><div class="colon">:</div><div class="value" id="DateReceipt"></div></div>
+    <div class="row"><div class="label">Lot/SurveyNo</div><div class="colon">:</div><div class="value" id="Lot/SurveyNo"></div></div>
+    <div class="row"><div class="label">Lot Area</div><div class="colon">:</div><div class="value" id="LotArea"></div></div>
+    <div class="row"><div class="label">Zone Classification</div><div class="colon">:</div><div class="value" id="Landclass"></div></div>
+    <div class="row"><div class="label">Barangay</div><div class="colon">:</div><div class="value" id="Barangay"></div></div>
+    <div class="row"><div class="label">Subdivided Area</div><div class="colon">:</div><div class="value" id="SubdividedArea"></div></div>
+    <div class="row"><div class="label">Date Approved DENRLMB</div><div class="colon">:</div><div class="value" id="DateApprovedDENRLMB"></div></div>
+    <div class="row"><div class="label">RoadWidth</div><div class="colon">:</div><div class="value" id="RoadWidth"></div></div>
+    <div class="row"><div class="label">Applicant Name</div><div class="colon">:</div><div class="value" id="ApplicantName"></div></div>
+    <div class="row"><div class="label">Lot Owner</div><div class="colon">:</div><div class="value" id="LotOwner"></div></div>
+    <div class="row"><div class="label">Legal Basis</div><div class="colon">:</div><div class="value" id="legalbasis_f"></div></div>
+    <div class="row"><div class="label">OR No</div><div class="colon">:</div><div class="value" id="ORNo"></div></div>
+    <div class="row"><div class="label">Amount Paid</div><div class="colon">:</div><div class="value" id="AmountPaid"></div></div>
+    <div class="row"><div class="label">Date Released</div><div class="colon">:</div><div class="value" id="DateSignedHead"></div></div>
+    <div class="row"><div class="label">Remarks</div><div class="colon">:</div><div class="value" id="Remarks"></div></div>
 </div>
 
 <div id="multiTableContainer">
@@ -130,7 +135,7 @@ body.dark-mode #matchStatus { color: #99ff99; }
 </div>
 
 <script>
-// previous JS code (load data, search, dark mode toggle, show details) remains unchanged
+// Your previous JS code for load, search, clear, dark mode, show details
 </script>
 
 </body>
