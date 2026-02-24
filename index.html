@@ -3,9 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
+
+<!-- ✅ CRITICAL FOR MOBILE -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s; }
+body { 
+    font-family: Arial; 
+    margin: 20px; 
+    transition: background 0.3s, color 0.3s; 
+}
+
+/* HEADER */
 .header {
     font-size: 24px;
     font-weight: bold;
@@ -14,25 +23,50 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
     border-bottom: 2px solid #333;
     margin-bottom: 20px;
 }
-.search-section { margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 8px; }
-.search-label { font-weight: bold; min-width: 120px; }
-.search-section input[type="text"], .search-section button {
-    flex: 1 1 auto;
-    min-width: 120px;
-    padding: 6px 10px;
+
+/* SEARCH */
+.search-section { 
+    margin-bottom: 20px; 
+}
+
+.search-label { 
+    font-weight: bold; 
+    margin-right: 8px; 
+}
+
+input[type="text"] { 
+    padding: 6px; 
+    width: 220px; 
+    max-width: 100%;
     box-sizing: border-box;
 }
-button { cursor: pointer; }
-button + button { margin-left: 0; } /* spacing handled by flex gap */
 
-/* Details container */
-.container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; }
-.container > div { flex: 1 1 100%; display: flex; }
-.label { font-weight: bold; min-width: 120px; }
-.colon { margin: 0 4px; display: none; }
-.container div[id] { flex: 1; word-break: break-word; }
+button { 
+    padding: 6px 12px; 
+    cursor: pointer; 
+    max-width: 100%;
+}
 
-/* Status & record info */
+button + button { 
+    margin-left: 5px; 
+}
+
+/* DETAILS GRID (UNCHANGED STRUCTURE) */
+.container { 
+    display: grid; 
+    grid-template-columns: 200px 15px auto; 
+    row-gap: 6px; 
+    margin-bottom: 25px; 
+}
+
+.label { font-weight: bold; }
+.colon { text-align: center; }
+
+.container div[id] {
+    word-break: break-word; /* prevents overflow */
+}
+
+/* STATUS */
 #statusContainer { text-align: left; margin-bottom: 15px; font-size: 13px; }
 #statusContainer div { margin: 2px 0; }
 #recordCount { color: blue; font-weight: bold; }
@@ -40,34 +74,56 @@ button + button { margin-left: 0; } /* spacing handled by flex gap */
 #matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 15px; color: green; }
 #sheetName { text-align:left; font-weight:normal; margin-bottom:10px; font-size:13px; color:#000000; }
 
-/* Table */
-#multiTableContainer { display: none; margin-top: 20px; overflow-x: auto; }
-#multiTable { border-collapse: collapse; width: 100%; min-width: 600px; transition: background 0.3s, color 0.3s; }
-#multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; transition: background 0.3s, color 0.3s; }
+/* TABLE */
+#multiTableContainer { 
+    display: none; 
+    margin-top: 20px; 
+    overflow-x: auto; /* allow horizontal scroll */
+}
+
+#multiTable { 
+    border-collapse: collapse; 
+    width: 100%; 
+    min-width: 600px; /* keep scroll behavior */
+}
+
+#multiTable th, #multiTable td { 
+    border: 1px solid #333; 
+    padding: 6px; 
+    text-align: left; 
+}
+
 #multiTable th { background-color: #f2f2f2; }
 #multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
 
-/* DARK MODE STYLES */
+/* DARK MODE */
 body.dark-mode { background: #1e1e1e; color: #ccc; }
 body.dark-mode input, body.dark-mode button { background: #333; color: #fff; border: 1px solid #555; }
 body.dark-mode #loadedMsg { color: #00ff00; }
-body.dark-mode #multiTable { border-color: #555; }
 body.dark-mode #multiTable th { background: #555; color: #fff; }
 body.dark-mode #multiTable td { border-color: #666; }
 body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
 
-/* MOBILE ADJUSTMENTS */
+/* MOBILE SAFE ADJUSTMENTS (NO LAYOUT CHANGE) */
 @media (max-width: 600px) {
-    body { margin: 10px 5px; }
-    .search-section { flex-direction: column; gap: 6px; }
-    .search-label { min-width: 0; }
-    .search-section input[type="text"], .search-section button { width: 100%; }
-    .container { flex-direction: column; }
-    .container > div { flex-direction: column; }
-    .label { margin-bottom: 2px; }
-    .colon { display: none; }
+
+    body { margin: 10px; }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    button {
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    .container {
+        grid-template-columns: 140px 10px auto;
+    }
+
 }
 </style>
 </head>
@@ -129,7 +185,7 @@ body.dark-mode #matchStatus { color: #99ff99; }
 </div>
 
 <script>
-// Your existing JS code stays exactly the same
+/* YOUR ORIGINAL JS GOES HERE UNCHANGED */
 </script>
 
 </body>
