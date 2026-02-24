@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -60,8 +61,15 @@ button {
     margin-bottom: 25px; 
 }
 .label { font-weight: bold; }
-.colon { padding-left: 2px; text-align: left; width: auto; } 
-.container div[id] { word-break: break-word; }
+.colon { 
+    padding-left: 8px;   /* added extra space */
+    text-align: left; 
+    width: auto; 
+}
+.container div[id] { 
+    word-break: break-word; 
+    padding-left: 4px; /* space between colon and value */
+}
 
 /* Status */
 #statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
@@ -156,6 +164,7 @@ body.dark-mode #matchedFound span { color: #ccc; }
 </div>
 
 <script>
+// === your existing JavaScript (loading data, search, dark mode, beeps, matched count) ===
 const sheetURL = "https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
 
 let allData = [];
@@ -167,20 +176,6 @@ const recordCount = document.getElementById("recordCount");
 const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
 const matchedCountEl = document.getElementById("matchedCount");
-
-// Beep function from ZCQRScanner
-function playBeep(type="success") {
-    try {
-        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const ctx = window.beepAudioCtx;
-        const oscillator = ctx.createOscillator();
-        oscillator.type = "square";
-        oscillator.frequency.value = type === "success" ? 1000 : 300; // high for success, low for error
-        oscillator.connect(ctx.destination);
-        oscillator.start();
-        oscillator.stop(ctx.currentTime + 0.12);
-    } catch(e) {}
-}
 
 // Load data
 window.addEventListener("load", async () => {
@@ -216,7 +211,7 @@ document.getElementById("searchInput").addEventListener("input", () => {
 // Clear button
 document.getElementById("clearBtn").addEventListener("click", clearAll);
 
-// Search function with beeps & mobile keyboard hide
+// Search function
 function searchLocal(trackNo, showStatus) {
     const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
 
@@ -230,8 +225,7 @@ function searchLocal(trackNo, showStatus) {
         if (showStatus) { 
             matchStatus.textContent = "NO RECORD FOUND"; 
             matchStatus.style.color = "red"; 
-            playBeep("error");      // 🔊 beep for no record
-            document.getElementById("searchInput").blur(); // hide mobile keyboard
+            playBeep("error");
         }
         return;
     }
@@ -241,8 +235,7 @@ function searchLocal(trackNo, showStatus) {
         if (showStatus) { 
             matchStatus.textContent = "VERIFIED DATA"; 
             matchStatus.style.color = ""; 
-            playBeep("success");    // 🔊 beep for verified
-            document.getElementById("searchInput").blur(); // hide mobile keyboard
+            playBeep("success");
         }
         return;
     }
@@ -267,12 +260,7 @@ function searchLocal(trackNo, showStatus) {
         if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
     });
     document.getElementById("multiTableContainer").style.display = "block";
-    if (showStatus) { 
-        matchStatus.textContent = "VERIFIED DATA"; 
-        matchStatus.style.color = ""; 
-        playBeep("success");       // 🔊 beep for multiple matches
-        document.getElementById("searchInput").blur(); // hide mobile keyboard
-    }
+    if (showStatus) { matchStatus.textContent = "VERIFIED DATA"; matchStatus.style.color = ""; playBeep("success"); }
 }
 
 function showDetail(record) {
@@ -291,6 +279,19 @@ function clearAll() {
     selectedRow=null; 
     matchStatus.textContent=""; 
     matchedCountEl.textContent="0";
+}
+
+function playBeep(type="success") {
+    try {
+        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = window.beepAudioCtx;
+        const oscillator = ctx.createOscillator();
+        oscillator.type = "square";
+        oscillator.frequency.value = type === "success" ? 1000 : 300; 
+        oscillator.connect(ctx.destination);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + 0.12);
+    } catch(e) {}
 }
 </script>
 
