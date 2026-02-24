@@ -61,15 +61,8 @@ button {
     margin-bottom: 25px; 
 }
 .label { font-weight: bold; }
-.colon { 
-    padding-left: 8px;   /* added extra space */
-    text-align: left; 
-    width: auto; 
-}
-.container div[id] { 
-    word-break: break-word; 
-    padding-left: 4px; /* space between colon and value */
-}
+.colon { padding-left: 6px; text-align: left; width: auto; } /* extra space for colon */
+.container div[id] { word-break: break-word; font-weight: bold; } /* values bold */
 
 /* Status */
 #statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
@@ -164,7 +157,6 @@ body.dark-mode #matchedFound span { color: #ccc; }
 </div>
 
 <script>
-// === your existing JavaScript (loading data, search, dark mode, beeps, matched count) ===
 const sheetURL = "https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
 
 let allData = [];
@@ -227,7 +219,6 @@ function searchLocal(trackNo, showStatus) {
             matchStatus.style.color = "red"; 
             playBeep("error");
         }
-        return;
     }
 
     if (matches.length === 1) {
@@ -237,30 +228,33 @@ function searchLocal(trackNo, showStatus) {
             matchStatus.style.color = ""; 
             playBeep("success");
         }
-        return;
     }
 
-    const tbody = document.getElementById("multiTableBody");
-    matches.forEach((r, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML =
-            "<td>" + (r.TrackNo || "") + "</td>" +
-            "<td>" + (r.DateReceipt || "") + "</td>" +
-            "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
-            "<td>" + (r.LotArea || "") + "</td>" +
-            "<td>" + (r.Landclass || "") + "</td>" +
-            "<td>" + (r.Barangay || "") + "</td>";
-        tr.addEventListener("click", function() {
-            if (selectedRow) selectedRow.classList.remove("selected");
-            tr.classList.add("selected");
-            selectedRow = tr;
-            showDetail(r);
+    if (matches.length > 1) {
+        const tbody = document.getElementById("multiTableBody");
+        matches.forEach((r, index) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML =
+                "<td>" + (r.TrackNo || "") + "</td>" +
+                "<td>" + (r.DateReceipt || "") + "</td>" +
+                "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
+                "<td>" + (r.LotArea || "") + "</td>" +
+                "<td>" + (r.Landclass || "") + "</td>" +
+                "<td>" + (r.Barangay || "") + "</td>";
+            tr.addEventListener("click", function() {
+                if (selectedRow) selectedRow.classList.remove("selected");
+                tr.classList.add("selected");
+                selectedRow = tr;
+                showDetail(r);
+            });
+            tbody.appendChild(tr);
+            if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
         });
-        tbody.appendChild(tr);
-        if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
-    });
-    document.getElementById("multiTableContainer").style.display = "block";
-    if (showStatus) { matchStatus.textContent = "VERIFIED DATA"; matchStatus.style.color = ""; playBeep("success"); }
+        document.getElementById("multiTableContainer").style.display = "block";
+    }
+
+    // Auto-hide mobile keyboard after search
+    document.getElementById("searchInput").blur();
 }
 
 function showDetail(record) {
