@@ -168,6 +168,7 @@ const recordCount = document.getElementById("recordCount");
 const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
 const matchedCountEl = document.getElementById("matchedCount");
+const searchInput = document.getElementById("searchInput");
 
 // Load data
 window.addEventListener("load", async () => {
@@ -179,7 +180,7 @@ window.addEventListener("load", async () => {
         loadedMsg.textContent = "All data loaded. You can now search.";
         recordCount.textContent = allData.length;
         if (data.sheetName) sheetNameEl.textContent = data.sheetName;
-        document.getElementById("searchInput").disabled = false;
+        searchInput.disabled = false;
     } catch(err) {
         console.error(err);
         loadedMsg.textContent = "Failed to load data.";
@@ -193,9 +194,9 @@ document.getElementById("darkModeBtn").addEventListener("click", () => {
 });
 
 // Live search
-document.getElementById("searchInput").addEventListener("input", () => {
+searchInput.addEventListener("input", () => {
     clearTimeout(typingTimer);
-    const value = document.getElementById("searchInput").value.trim();
+    const value = searchInput.value.trim();
     if (!value) { clearAll(); return; }
     typingTimer = setTimeout(() => searchLocal(value, true), 2000);
 });
@@ -212,6 +213,9 @@ function searchLocal(trackNo, showStatus) {
     selectedRow = null;
 
     matchedCountEl.textContent = matches.length; // update matched count
+
+    // Auto hide mobile keyboard
+    searchInput.blur();
 
     if (matches.length === 0) {
         if (showStatus) { 
@@ -242,6 +246,8 @@ function searchLocal(trackNo, showStatus) {
             tr.classList.add("selected");
             selectedRow = tr;
             showDetail(r);
+            // hide keyboard when user clicks a row on mobile
+            searchInput.blur();
         });
         tbody.appendChild(tr);
         if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
@@ -260,7 +266,7 @@ function showDetail(record) {
 function clearDisplay() { document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); }
 function clearMultiTable() { document.getElementById("multiTableBody").innerHTML = ""; document.getElementById("multiTableContainer").style.display = "none"; }
 function clearAll() { 
-    document.getElementById("searchInput").value=""; 
+    searchInput.value=""; 
     clearDisplay(); 
     clearMultiTable(); 
     selectedRow=null; 
@@ -271,4 +277,3 @@ function clearAll() {
 
 </body>
 </html>
-
