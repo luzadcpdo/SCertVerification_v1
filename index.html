@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
 
-<!-- Mobile scaling meta, but layout stays identical to desktop -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -26,10 +25,11 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
     display: block; 
     margin-bottom: 4px; 
 }
-.search-container { display: block; }
+.search-container { display: block; text-align: left; }
 .search-input { 
     padding: 6px; 
-    width: 100%; 
+    width: 300px;       /* fixed width to avoid too wide on mobile */
+    max-width: 100%;    /* but shrink on very small screens */
     box-sizing: border-box; 
     margin-bottom: 6px; 
 }
@@ -107,6 +107,7 @@ body.dark-mode #matchStatus { color: #99ff99; }
     <span class="search-label">Search TrackNo :</span>
     <div class="search-container">
         <input type="text" id="searchInput" class="search-input" placeholder="Enter TrackNo" disabled>
+        <br>
         <button id="clearBtn">Clear</button>
         <button id="darkModeBtn">Dark Mode</button>
     </div>
