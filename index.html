@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>SubCert Verification</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s; }
 
+/* Header */
 .header {
     font-size: 24px;
     font-weight: bold;
@@ -221,6 +221,14 @@ function playBeep(type="success") {
     } catch(e) {}
 }
 
+/* LONG DATE FORMATTER */
+function formatDate(value) {
+    if (!value) return "";
+    const d = new Date(value);
+    if (isNaN(d)) return value;
+    return d.toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" });
+}
+
 function searchLocal(trackNo, showStatus) {
     const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
 
@@ -252,11 +260,12 @@ function searchLocal(trackNo, showStatus) {
     }
 
     const tbody = document.getElementById("multiTableBody");
+
     matches.forEach((r, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML =
             "<td>" + (r.TrackNo || "") + "</td>" +
-            "<td>" + (r.DateReceipt || "") + "</td>" +
+            "<td>" + formatDate(r.DateReceipt) + "</td>" +
             "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
             "<td>" + (r.LotArea || "") + "</td>" +
             "<td>" + (r.Landclass || "") + "</td>" +
@@ -282,7 +291,12 @@ function searchLocal(trackNo, showStatus) {
 function showDetail(record) {
     for (let key in record) {
         const el = document.getElementById(key);
-        if (el) el.textContent = record[key];
+        if (!el) continue;
+        let value = record[key] || "";
+        if (key === "DateReceipt" || key === "DateApprovedDENRLMB" || key === "DateSignedHead") {
+            value = formatDate(value);
+        }
+        el.textContent = value;
     }
 }
 
