@@ -95,6 +95,14 @@ body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff;
 body.dark-mode #sheetName { color: #fff; }
 body.dark-mode #matchStatus { color: #99ff99; }
 body.dark-mode #matchedFound span { color: #ccc; }
+
+/* ===== DESKTOP CENTER ONLY (DOES NOT TOUCH MOBILE) ===== */
+@media screen and (min-width: 1024px) {
+    body {
+        max-width: 1000px;
+        margin: 20px auto;
+    }
+}
 </style>
 </head>
 <body>
@@ -170,7 +178,6 @@ const sheetNameEl = document.getElementById("sheetName");
 const matchStatus = document.getElementById("matchStatus");
 const matchedCountEl = document.getElementById("matchedCount");
 
-// Load data
 window.addEventListener("load", async () => {
     try {
         const res = await fetch(sheetURL);
@@ -188,12 +195,10 @@ window.addEventListener("load", async () => {
     }
 });
 
-// Dark mode toggle
 document.getElementById("darkModeBtn").addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 });
 
-// Live search
 document.getElementById("searchInput").addEventListener("input", () => {
     clearTimeout(typingTimer);
     const value = document.getElementById("searchInput").value.trim();
@@ -201,10 +206,8 @@ document.getElementById("searchInput").addEventListener("input", () => {
     typingTimer = setTimeout(() => searchLocal(value, true), 2000);
 });
 
-// Clear button
 document.getElementById("clearBtn").addEventListener("click", clearAll);
 
-// Play beep function
 function playBeep(type="success") {
     try {
         if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -218,7 +221,6 @@ function playBeep(type="success") {
     } catch(e) {}
 }
 
-// Search function
 function searchLocal(trackNo, showStatus) {
     const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
 
@@ -233,7 +235,7 @@ function searchLocal(trackNo, showStatus) {
             matchStatus.textContent = "NO RECORD FOUND"; 
             matchStatus.style.color = "red"; 
             playBeep("error");
-            document.getElementById("searchInput").blur(); // hide keyboard
+            document.getElementById("searchInput").blur();
         }
         return;
     }
@@ -244,7 +246,7 @@ function searchLocal(trackNo, showStatus) {
             matchStatus.textContent = "VERIFIED DATA"; 
             matchStatus.style.color = ""; 
             playBeep("success");
-            document.getElementById("searchInput").blur(); // hide keyboard
+            document.getElementById("searchInput").blur();
         }
         return;
     }
@@ -273,14 +275,14 @@ function searchLocal(trackNo, showStatus) {
         matchStatus.textContent = "VERIFIED DATA"; 
         matchStatus.style.color = ""; 
         playBeep("success");
-        document.getElementById("searchInput").blur(); // hide keyboard
+        document.getElementById("searchInput").blur();
     }
 }
 
 function showDetail(record) {
     for (let key in record) {
         const el = document.getElementById(key);
-        if (el) el.textContent = record[key]; // value starts immediately after 2-space colon
+        if (el) el.textContent = record[key];
     }
 }
 
@@ -298,4 +300,3 @@ function clearAll() {
 
 </body>
 </html>
-
