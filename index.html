@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,299 +19,408 @@ body { font-family: Arial; margin: 20px; transition: background 0.3s, color 0.3s
     margin-bottom: 20px;
 }
 
-/* Search Section */
+/* SEARCH */
 .search-section { margin-bottom: 10px; }
-.search-label { 
-    font-weight: bold; 
-    display: block; 
-    margin-bottom: 4px; 
-}
-.search-container { display: flex; align-items: center; flex-wrap: wrap; }
+.search-label { font-weight: bold; display:block; margin-bottom:4px; }
+.search-container { display:flex; align-items:center; flex-wrap:wrap; }
+
 .search-input { 
-    padding: 6px; 
-    width: 180px;       
-    max-width: 100%;    
-    box-sizing: border-box; 
-    margin-right: 6px;  
+    padding:6px;
+    width:180px;
+    max-width:100%;
+    box-sizing:border-box;
+    margin-right:6px;
 }
 
 /* Buttons */
 button { 
-    padding: 6px 12px; 
-    cursor: pointer; 
-    border: none; 
-    border-radius: 4px;
-    color: white;
-    margin-right: 5px;
-    margin-top: 0; 
+    padding:6px 12px;
+    cursor:pointer;
+    border:none;
+    border-radius:4px;
+    color:white;
+    margin-right:5px;
 }
-#clearBtn { background-color: #f44336; }
-#clearBtn:hover { background-color: #d32f2f; }
-#darkModeBtn { background-color: #000; }
-#darkModeBtn:hover { background-color: #333; }
 
-/* Matched Found */
-#matchedFound { margin-bottom: 15px; font-weight: normal; font-size: 13px; }
-#matchedFound span { font-weight: bold; color: black; font-size: 13px; }
+#clearBtn { background-color:#f44336; }
+#darkModeBtn { background-color:#000; }
 
 /* Info Grid */
 .container { 
-    display: grid; 
-    grid-template-columns: auto auto 1fr; 
-    row-gap: 6px; 
-    margin-bottom: 25px; 
+    display:grid;
+    grid-template-columns:auto auto 1fr;
+    row-gap:6px;
+    margin-bottom:25px;
 }
-.label { font-weight: bold; }
-.colon { padding-left: 4px; padding-right: 4px; text-align: left; width: auto; } 
-.container div[id] { word-break: break-word; }
+
+.label { font-weight:bold; }
+.colon { padding:0 4px; }
 
 /* Status */
-#statusContainer { text-align: left; margin-bottom: 10px; font-size: 13px; }
-#statusContainer div { margin: 2px 0; }
-#recordCount { color: blue; font-weight: bold; }
-#loadedMsg { font-weight: bold; color: green; }
-#matchStatus { font-weight: bold; font-size: 16px; margin-bottom: 10px; color: green; }
+#statusContainer { text-align:left; margin-bottom:10px; font-size:13px; }
+#recordCount { color:blue; font-weight:bold; }
+#loadedMsg { font-weight:bold; color:green; }
+#matchStatus { font-weight:bold; font-size:16px; margin-bottom:10px; color:green; }
 
-/* Table */
-#multiTableContainer { display: none; margin-top: 20px; overflow-x: auto; }
-#multiTable { border-collapse: collapse; width: 100%; min-width: 650px; transition: background 0.3s, color 0.3s; }
-#multiTable th, #multiTable td { border: 1px solid #333; padding: 6px; text-align: left; transition: background 0.3s, color 0.3s; }
-#multiTable th { background-color: #f2f2f2; }
-#multiTable tr.selected { background-color: #d0eaff; cursor: pointer; }
+#matchedFound { margin-bottom:15px; font-size:13px; }
+#matchedFound span { font-weight:bold; }
 
-#sheetName { font-weight:normal; margin-bottom:5px; font-size:13px; color:#000; }
+/* TABLE */
+#multiTableContainer { display:none; margin-top:20px; overflow-x:auto; }
+
+#multiTable {
+    border-collapse:collapse;
+    width:100%;
+    min-width:650px;
+}
+
+#multiTable th,#multiTable td {
+    border:1px solid #333;
+    padding:6px;
+}
+
+#multiTable th { background:#f2f2f2; }
+
+#multiTable tr.selected {
+    background:#d0eaff;
+}
 
 /* DARK MODE */
-body.dark-mode {
-    background: #1e1e1e;
-    color: #ccc;
-}
-body.dark-mode input { background: #333; color: #fff; border: 1px solid #555; }
-body.dark-mode #clearBtn { background-color: #f44336; color: #fff; }
-body.dark-mode #darkModeBtn { background-color: #ccc; color: #000; }
-body.dark-mode #loadedMsg { color: #00ff00; }
-body.dark-mode #multiTable th { background: #555; color: #fff; }
-body.dark-mode #multiTable td { border-color: #666; }
-body.dark-mode #multiTable tr.selected { background-color: #3399ff; color: #fff; }
-body.dark-mode #sheetName { color: #fff; }
-body.dark-mode #matchStatus { color: #99ff99; }
-body.dark-mode #matchedFound span { color: #ccc; }
+body.dark-mode { background:#1e1e1e; color:#ccc; }
+body.dark-mode input { background:#333; color:#fff; border:1px solid #555; }
+body.dark-mode #multiTable th { background:#555; }
 
-/* ===== DESKTOP CENTER ONLY (DOES NOT TOUCH MOBILE) ===== */
-@media screen and (min-width: 1024px) {
-    body {
-        max-width: 1000px;
-        margin: 20px auto;
-    }
+/* DESKTOP CENTER */
+@media screen and (min-width:1024px){
+body{max-width:1000px;margin:20px auto;}
+}
+
+/* ================= POPUP MODAL ================= */
+
+#trackModal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.65);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+#trackModalContent{
+background:white;
+padding:25px;
+border-radius:8px;
+text-align:center;
+width:320px;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+}
+
+#trackModalContent label{
+font-weight:bold;
+display:block;
+margin-bottom:10px;
+font-size:16px;
+}
+
+#trackModalContent input{
+width:100%;
+padding:8px;
+margin-bottom:12px;
+font-size:14px;
+}
+
+#trackModalContent button{
+background:#4CAF50;
+padding:8px 16px;
 }
 </style>
 </head>
+
 <body>
+
+<!-- POPUP -->
+<div id="trackModal">
+<div id="trackModalContent">
+<label>INPUT TRACKING NUMBER</label>
+<input type="text" id="popupTrackInput" placeholder="Enter TrackNo">
+<button onclick="submitTracking()">Search</button>
+</div>
+</div>
 
 <div class="header">SUBD CERT VERIFICATION</div>
 
 <div id="statusContainer">
-    <div id="loadedMsg">Loading data...</div>
-    <div id="recordMsg">Record: <span id="recordCount">0</span></div>
-    <div id="sheetName">&nbsp;</div>
+<div id="loadedMsg">Loading data...</div>
+<div id="recordMsg">Record: <span id="recordCount">0</span></div>
+<div id="sheetName">&nbsp;</div>
 </div>
 
 <div id="matchedFound">Matched Found: <span id="matchedCount">0</span></div>
-
 <div id="matchStatus"></div>
 
 <div class="search-section">
-    <span class="search-label">Search Track No</span>
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Enter TrackNo" disabled>
-        <button id="clearBtn">Clear</button>
-        <button id="darkModeBtn">Dark Mode</button>
-    </div>
+<span class="search-label">Search Track No</span>
+
+<div class="search-container">
+<input type="text" id="searchInput" class="search-input" placeholder="Enter TrackNo" disabled>
+<button id="clearBtn">Clear</button>
+<button id="darkModeBtn">Dark Mode</button>
+</div>
 </div>
 
 <div class="container">
-    <div class="label">TrackNo</div><div class="colon">  :  </div><div id="TrackNo"></div>
-    <div class="label">Date Receipt</div><div class="colon">  :  </div><div id="DateReceipt"></div>
-    <div class="label">Lot/SurveyNo</div><div class="colon">  :  </div><div id="Lot/SurveyNo"></div>
-    <div class="label">Lot Area</div><div class="colon">  :  </div><div id="LotArea"></div>
-    <div class="label">Zone Class</div><div class="colon">  :  </div><div id="Landclass"></div>
-    <div class="label">Barangay</div><div class="colon">  :  </div><div id="Barangay"></div>
-    <div class="label">No. of Sub-lots</div><div class="colon">  :  </div><div id="SubdividedArea"></div>
-    <div class="label">DENR Approval</div><div class="colon">  :  </div><div id="DateApprovedDENRLMB"></div>
-    <!--<div class="label">RoadWidth</div><div class="colon">  :  </div><div id="RoadWidth"></div>>-->
-    <!--<div class="label">Applicant Name</div><div class="colon">  :  </div><div id="ApplicantName"></div>-->
-    <!--<div class="label">Lot Owner</div><div class="colon">  :  </div><div id="LotOwner"></div>-->
-    <div class="label">Legal Basis</div><div class="colon">  :  </div><div id="legalbasis_f"></div>
-    <div class="label">Decision</div><div class="colon">  :  </div><div id="TypeofSubdCert"></div>
-    <div class="label">OR No</div><div class="colon">  :  </div><div id="ORNo"></div>
-    <div class="label">Amount Paid</div><div class="colon">  :  </div><div id="AmountPaid"></div>
-    <div class="label">Date Released</div><div class="colon">  :  </div><div id="DateSignedHead"></div>
-    <div class="label">Remarks</div><div class="colon">  :  </div><div id="Remarks"></div>
+
+<div class="label">TrackNo</div><div class="colon">:</div><div id="TrackNo"></div>
+<div class="label">Date Receipt</div><div class="colon">:</div><div id="DateReceipt"></div>
+<div class="label">Lot/SurveyNo</div><div class="colon">:</div><div id="Lot/SurveyNo"></div>
+<div class="label">Lot Area</div><div class="colon">:</div><div id="LotArea"></div>
+<div class="label">Zone Class</div><div class="colon">:</div><div id="Landclass"></div>
+<div class="label">Barangay</div><div class="colon">:</div><div id="Barangay"></div>
+<div class="label">No. of Sub-lots</div><div class="colon">:</div><div id="SubdividedArea"></div>
+<div class="label">DENR Approval</div><div class="colon">:</div><div id="DateApprovedDENRLMB"></div>
+<div class="label">Legal Basis</div><div class="colon">:</div><div id="legalbasis_f"></div>
+<div class="label">Decision</div><div class="colon">:</div><div id="TypeofSubdCert"></div>
+<div class="label">OR No</div><div class="colon">:</div><div id="ORNo"></div>
+<div class="label">Amount Paid</div><div class="colon">:</div><div id="AmountPaid"></div>
+<div class="label">Date Released</div><div class="colon">:</div><div id="DateSignedHead"></div>
+<div class="label">Remarks</div><div class="colon">:</div><div id="Remarks"></div>
+
 </div>
 
 <div id="multiTableContainer">
-    <h3>Matched Records</h3>
-    <table id="multiTable">
-        <thead>
-            <tr>
-                <th>TrackNo</th>
-                <th>Date Receipt</th>
-                <th>Lot/SurveyNo</th>
-                <th>Lot Area</th>
-                <th>Zone Classification</th>
-                <th>Barangay</th>
-            </tr>
-        </thead>
-        <tbody id="multiTableBody"></tbody>
-    </table>
+<h3>Matched Records</h3>
+
+<table id="multiTable">
+<thead>
+<tr>
+<th>TrackNo</th>
+<th>Date Receipt</th>
+<th>Lot/SurveyNo</th>
+<th>Lot Area</th>
+<th>Zone Classification</th>
+<th>Barangay</th>
+</tr>
+</thead>
+
+<tbody id="multiTableBody"></tbody>
+</table>
 </div>
 
 <script>
-const sheetURL = "https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
 
-let allData = [];
-let typingTimer = null;
-let selectedRow = null;
+const sheetURL="https://script.google.com/macros/s/AKfycbyc3gGPRjztmEtZCCdPYbmijrPKOFNgP7p4eYGiGUTYvSf3R-93GiymRufKd7mR4Hq9JA/exec";
 
-const loadedMsg = document.getElementById("loadedMsg");
-const recordCount = document.getElementById("recordCount");
-const sheetNameEl = document.getElementById("sheetName");
-const matchStatus = document.getElementById("matchStatus");
-const matchedCountEl = document.getElementById("matchedCount");
+let allData=[];
+let selectedRow=null;
 
-window.addEventListener("load", async () => {
-    try {
-        const res = await fetch(sheetURL);
-        const data = await res.json();
-        if (!data.success || !Array.isArray(data.data)) throw new Error("Invalid server response");
-        allData = data.data;
-        loadedMsg.textContent = "All data loaded. You can now search.";
-        recordCount.textContent = allData.length;
-        if (data.sheetName) sheetNameEl.textContent = data.sheetName;
-        document.getElementById("searchInput").disabled = false;
-    } catch(err) {
-        console.error(err);
-        loadedMsg.textContent = "Failed to load data.";
-        loadedMsg.style.color = "red";
-    }
+const loadedMsg=document.getElementById("loadedMsg");
+const recordCount=document.getElementById("recordCount");
+const matchStatus=document.getElementById("matchStatus");
+const matchedCountEl=document.getElementById("matchedCount");
+
+/* LOAD DATA */
+
+window.addEventListener("load",async()=>{
+
+try{
+
+const res=await fetch(sheetURL);
+const data=await res.json();
+
+allData=data.data||[];
+
+loadedMsg.textContent="All data loaded.";
+recordCount.textContent=allData.length;
+
+document.getElementById("searchInput").disabled=false;
+
+document.getElementById("popupTrackInput").focus();
+
+}catch(err){
+
+loadedMsg.textContent="Failed to load data.";
+loadedMsg.style.color="red";
+
+}
+
 });
 
-document.getElementById("darkModeBtn").addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
+/* POPUP SEARCH */
+
+function submitTracking(){
+
+const value=document.getElementById("popupTrackInput").value.trim();
+
+if(!value)return;
+
+document.getElementById("trackModal").style.display="none";
+
+document.getElementById("searchInput").value=value;
+
+searchLocal(value,true);
+
+}
+
+/* ENTER KEY */
+
+document.getElementById("popupTrackInput").addEventListener("keypress",function(e){
+
+if(e.key==="Enter")submitTracking();
+
 });
 
-document.getElementById("searchInput").addEventListener("input", () => {
-    clearTimeout(typingTimer);
-    const value = document.getElementById("searchInput").value.trim();
-    if (!value) { clearAll(); return; }
-    typingTimer = setTimeout(() => searchLocal(value, true), 2000);
+/* SEARCH */
+
+function searchLocal(trackNo,showStatus){
+
+const matches=allData.filter(r=>(r.TrackNo||"").toString().trim()===trackNo);
+
+clearDisplay();
+clearMultiTable();
+
+matchedCountEl.textContent=matches.length;
+
+if(matches.length===0){
+
+matchStatus.textContent="NO RECORD FOUND";
+matchStatus.style.color="red";
+return;
+
+}
+
+if(matches.length===1){
+
+showDetail(matches[0]);
+matchStatus.textContent="VERIFIED DATA";
+return;
+
+}
+
+const tbody=document.getElementById("multiTableBody");
+
+matches.forEach((r,index)=>{
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=
+"<td>"+(r.TrackNo||"")+"</td>"+
+"<td>"+formatDate(r.DateReceipt)+"</td>"+
+"<td>"+(r['Lot/SurveyNo']||"")+"</td>"+
+"<td>"+(r.LotArea||"")+"</td>"+
+"<td>"+(r.Landclass||"")+"</td>"+
+"<td>"+(r.Barangay||"")+"</td>";
+
+tr.addEventListener("click",function(){
+
+if(selectedRow)selectedRow.classList.remove("selected");
+
+tr.classList.add("selected");
+
+selectedRow=tr;
+
+showDetail(r);
+
 });
 
-document.getElementById("clearBtn").addEventListener("click", clearAll);
+tbody.appendChild(tr);
 
-function playBeep(type="success") {
-    try {
-        if (!window.beepAudioCtx) window.beepAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const ctx = window.beepAudioCtx;
-        const oscillator = ctx.createOscillator();
-        oscillator.type = "square";
-        oscillator.frequency.value = type === "success" ? 1000 : 300;
-        oscillator.connect(ctx.destination);
-        oscillator.start();
-        oscillator.stop(ctx.currentTime + 0.12);
-    } catch(e) {}
+if(index===0){
+tr.classList.add("selected");
+selectedRow=tr;
+showDetail(r);
 }
 
-/* LONG DATE FORMATTER */
-function formatDate(value) {
-    if (!value) return "";
-    const d = new Date(value);
-    if (isNaN(d)) return value;
-    return d.toLocaleDateString("en-US", { timeZone: "UTC", year: "numeric", month: "long", day: "numeric" });
+});
+
+document.getElementById("multiTableContainer").style.display="block";
+
+matchStatus.textContent="VERIFIED DATA";
+
 }
 
-function searchLocal(trackNo, showStatus) {
-    const matches = allData.filter(r => (r.TrackNo || "").toString().trim() === trackNo);
+/* DETAIL DISPLAY */
 
-    clearDisplay();
-    clearMultiTable();
-    selectedRow = null;
+function showDetail(record){
 
-    matchedCountEl.textContent = matches.length;
+for(let key in record){
 
-    if (matches.length === 0) {
-        if (showStatus) { 
-            matchStatus.textContent = "NO RECORD FOUND"; 
-            matchStatus.style.color = "red"; 
-            playBeep("error");
-            document.getElementById("searchInput").blur();
-        }
-        return;
-    }
+const el=document.getElementById(key);
 
-    if (matches.length === 1) {
-        showDetail(matches[0]);
-        if (showStatus) { 
-            matchStatus.textContent = "VERIFIED DATA"; 
-            matchStatus.style.color = ""; 
-            playBeep("success");
-            document.getElementById("searchInput").blur();
-        }
-        return;
-    }
+if(!el)continue;
 
-    const tbody = document.getElementById("multiTableBody");
+let value=record[key]||"";
 
-    matches.forEach((r, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML =
-            "<td>" + (r.TrackNo || "") + "</td>" +
-            "<td>" + formatDate(r.DateReceipt) + "</td>" +
-            "<td>" + (r['Lot/SurveyNo'] || "") + "</td>" +
-            "<td>" + (r.LotArea || "") + "</td>" +
-            "<td>" + (r.Landclass || "") + "</td>" +
-            "<td>" + (r.Barangay || "") + "</td>";
-        tr.addEventListener("click", function() {
-            if (selectedRow) selectedRow.classList.remove("selected");
-            tr.classList.add("selected");
-            selectedRow = tr;
-            showDetail(r);
-        });
-        tbody.appendChild(tr);
-        if (index === 0) { tr.classList.add("selected"); selectedRow = tr; showDetail(r); }
-    });
-    document.getElementById("multiTableContainer").style.display = "block";
-    if (showStatus) { 
-        matchStatus.textContent = "VERIFIED DATA"; 
-        matchStatus.style.color = ""; 
-        playBeep("success");
-        document.getElementById("searchInput").blur();
-    }
+if(key==="DateReceipt"||key==="DateApprovedDENRLMB"||key==="DateSignedHead"){
+
+value=formatDate(value);
+
 }
 
-function showDetail(record) {
-    for (let key in record) {
-        const el = document.getElementById(key);
-        if (!el) continue;
-        let value = record[key] || "";
-        if (key === "DateReceipt" || key === "DateApprovedDENRLMB" || key === "DateSignedHead") {
-            value = formatDate(value);
-        }
-        el.textContent = value;
-    }
+el.textContent=value;
+
 }
 
-function clearDisplay() { document.querySelectorAll(".container div[id]").forEach(f => f.textContent = ""); }
-function clearMultiTable() { document.getElementById("multiTableBody").innerHTML = ""; document.getElementById("multiTableContainer").style.display = "none"; }
-function clearAll() { 
-    document.getElementById("searchInput").value=""; 
-    clearDisplay(); 
-    clearMultiTable(); 
-    selectedRow=null; 
-    matchStatus.textContent=""; 
-    matchedCountEl.textContent="0";
 }
+
+/* DATE FORMAT */
+
+function formatDate(value){
+
+if(!value)return"";
+
+const d=new Date(value);
+
+if(isNaN(d))return value;
+
+return d.toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+
+}
+
+/* CLEAR */
+
+document.getElementById("clearBtn").onclick=function(){
+
+document.getElementById("searchInput").value="";
+
+clearDisplay();
+
+clearMultiTable();
+
+matchStatus.textContent="";
+
+matchedCountEl.textContent="0";
+
+};
+
+/* DARK MODE */
+
+document.getElementById("darkModeBtn").onclick=function(){
+
+document.body.classList.toggle("dark-mode");
+
+};
+
+/* HELPERS */
+
+function clearDisplay(){
+
+document.querySelectorAll(".container div[id]").forEach(f=>f.textContent="");
+
+}
+
+function clearMultiTable(){
+
+document.getElementById("multiTableBody").innerHTML="";
+document.getElementById("multiTableContainer").style.display="none";
+
+}
+
 </script>
 
 </body>
 </html>
+```
